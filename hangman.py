@@ -1,5 +1,6 @@
 import os
 import random
+from unicodedata import numeric
 
 def clear():
     os.system("clear")
@@ -17,29 +18,68 @@ def palabra_secreta():
     seleccion = random.choice(lista_palabras)
     return seleccion 
 
-def acentos():
-    pass 
+
+def normalize(s):
+    replacements = (
+        ("á", "a"),
+        ("é", "e"),
+        ("í", "i"),
+        ("ó", "o"),
+        ("ú", "u"),
+    )
+    for a, b in replacements:
+        s = s.replace(a, b).replace(a.upper(), b.upper())
+    return s
 
 def interfaz():
-    seleccion = palabra_secreta()
-    vidas = 6
     print("""
 Hola, Bienvenido al juego del ahorcado
 En la pantalla apreciarás la palabra que deberas adivinar
 Solo contarás con 6 vidas asi que se cuidadoso a la hora de elegir
 Listo? Comencemos.
 
-La palabra secreta es:{}
-""".format(seleccion))
+La palabra secreta es:
+""")
     
- 
+def juego():
+    lista_adivinanza= []
+    lista_total = []
+    seleccion = normalize(palabra_secreta())
+    print(seleccion)
+    actual = ("_"*len(seleccion))
+    vidas = 6
+    while vidas != 0:
+        print("vidas:",vidas)
+        print(actual)
+        adivinanza = (str(input("\nIngresa una letra:")))
+        clear()
+        if len(adivinanza) > 1:
+            print("Solo se puede poner una letra por intento >:v")
+        if len(adivinanza) == 1:
+            if adivinanza in lista_total:
+                print("Ya usaste esa letra, intenta con otra")
+            else:
+                if adivinanza in seleccion:
+                    print("Es correcto sigue asi",adivinanza)
+                    lista_adivinanza.append(adivinanza)
+                    lista_total.append(adivinanza)
+                elif adivinanza not in seleccion:
+                    print("Es incorrecto",adivinanza)
+                    vidas -= 1
+                    lista_total.append(adivinanza)
+                if len(lista_adivinanza) == len(seleccion):
+                    clear()
+                    print("FELICIDADES HAS GANADO TU PALABRA ERA:",seleccion)
+                    break
+                if vidas == 0:
+                    clear()
+                    print("Lo siento, has perdido, tu palabra era:",seleccion)       
 
 def run():
-    # lista_palabras = archivo()
-    # print(lista_palabras)
     clear()
     lista()
     interfaz()
-   
+    juego()
+    
 if __name__ == "__main__":
     run()
