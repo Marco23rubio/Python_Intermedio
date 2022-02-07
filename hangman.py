@@ -1,6 +1,5 @@
 import os
 import random
-from unicodedata import numeric
 
 def clear():
     os.system("clear")
