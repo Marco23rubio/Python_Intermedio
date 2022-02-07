@@ -46,12 +46,19 @@ def juego():
     lista_total = []
     seleccion = normalize(palabra_secreta())
     print(seleccion)
-    actual = ("_"*len(seleccion))
+    actual = []
     vidas = 6
+    for i in range(len(seleccion)):
+            actual.append("_")
     while vidas != 0:
         print("vidas:",vidas)
         print(actual)
+        print(lista_adivinanza)
         adivinanza = (str(input("\nIngresa una letra:")))
+        adivinanza = adivinanza.lower()
+        for i in range(len(seleccion)):
+            if seleccion[i] == adivinanza:
+                actual[i] = adivinanza
         clear()
         if len(adivinanza) > 1:
             print("Solo se puede poner una letra por intento >:v")
@@ -67,7 +74,7 @@ def juego():
                     print("Es incorrecto",adivinanza)
                     vidas -= 1
                     lista_total.append(adivinanza)
-                if len(lista_adivinanza) == len(seleccion):
+                if len(lista_adivinanza) == len(actual):
                     clear()
                     print("FELICIDADES HAS GANADO TU PALABRA ERA:",seleccion)
                     break
